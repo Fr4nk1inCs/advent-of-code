@@ -1,6 +1,6 @@
 /*
 Advent of Code 2023, Day 02
-Title: <title>
+Title: Cube Conundrum
 PART 1
   You're launched high into the atmosphere! The apex of your trajectory just
   barely reaches the surface of a large island floating in the sky. You gently
