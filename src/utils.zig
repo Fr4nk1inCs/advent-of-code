@@ -27,7 +27,13 @@ pub const SegmentIterator = struct {
         const bytes = try self.reader.streamDelimiterEnding(&self.writer.writer, self.delimiter);
 
         if (bytes == 0) {
-            return null;
+            const peeked = self.reader.peekByte();
+            if (peeked == error.EndOfStream) {
+                return null;
+            }
+            if (peeked == error.ReadFailed) {
+                return error.ReadFailed;
+            }
         }
 
         const segment = self.writer.written();
