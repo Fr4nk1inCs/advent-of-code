@@ -25,27 +25,24 @@ pub const SegmentIterator = struct {
 
     pub fn next(self: *SegmentIterator) !?[]u8 {
         const bytes = try self.reader.streamDelimiterEnding(&self.writer.writer, self.delimiter);
-
-        if (bytes == 0) {
-            const peeked = self.reader.peekByte();
-            if (peeked == error.EndOfStream) {
-                return null;
-            }
-            if (peeked == error.ReadFailed) {
-                return error.ReadFailed;
-            }
+        const end = try self.eos();
+        if (bytes == 0 and end)
+            return null;
+        if (!end) {
+            _ = try self.reader.takeByte();
         }
 
         const segment = self.writer.written();
         self.writer.clearRetainingCapacity();
-
-        _ = self.reader.takeByte() catch |err| {
-            if (err != error.EndOfStream) {
-                return err;
-            }
-        };
-
         return segment;
+    }
+
+    pub fn eos(self: *SegmentIterator) !bool {
+        _ = self.reader.peekByte() catch |err| switch (err) {
+            error.EndOfStream => return true,
+            else => return err,
+        };
+        return false;
     }
 };
 
