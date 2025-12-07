@@ -1,7 +1,7 @@
 const std = @import("std");
 
 const utils = @import("utils.zig");
-const get_input_file = utils.get_input_file;
+const getInputFile = utils.getInputFile;
 const SegmentIterator = utils.SegmentIterator;
 const FileSegmentReader = utils.FileSegmentReader;
 const BufferSegmentReader = utils.BufferSegmentReader;
@@ -13,7 +13,7 @@ const MyError = error{
     ParseError,
 };
 
-fn secret_entrance_part1(lines: *SegmentIterator) !i32 {
+fn part1(lines: *SegmentIterator) !i32 {
     var position: i16 = POS_START;
     var count: i16 = 0;
 
@@ -36,7 +36,7 @@ fn secret_entrance_part1(lines: *SegmentIterator) !i32 {
     return count;
 }
 
-fn secret_entrance_part2(lines: *SegmentIterator) !i32 {
+fn part2(lines: *SegmentIterator) !i32 {
     var position: i16 = POS_START;
     var count: i16 = 0;
 
@@ -68,7 +68,7 @@ fn secret_entrance_part2(lines: *SegmentIterator) !i32 {
 }
 
 pub fn main() !void {
-    var input_file = try get_input_file();
+    var input_file = try getInputFile();
     defer input_file.close();
 
     var read_buf: [1024]u8 = undefined;
@@ -83,14 +83,14 @@ pub fn main() !void {
     {
         var reader = try FileSegmentReader.init(&input_file, &read_buf, allocator, '\n');
         defer reader.deinit();
-        const result = try secret_entrance_part1(&reader.iterator);
+        const result = try part1(&reader.iterator);
         std.debug.print("Part 1: {d}\n", .{result});
     }
 
     {
         var reader = try FileSegmentReader.init(&input_file, &read_buf, allocator, '\n');
         defer reader.deinit();
-        const result = try secret_entrance_part2(&reader.iterator);
+        const result = try part2(&reader.iterator);
         std.debug.print("Part 2: {d}\n", .{result});
     }
 }
@@ -113,14 +113,14 @@ test "secret-entrance" {
     {
         var reader = try BufferSegmentReader.init(testcase, allocator, '\n');
         defer reader.deinit();
-        const result = try secret_entrance_part1(&reader.iterator);
+        const result = try part1(&reader.iterator);
         try std.testing.expectEqual(3, result);
     }
 
     {
         var reader = try BufferSegmentReader.init(testcase, allocator, '\n');
         defer reader.deinit();
-        const result = try secret_entrance_part2(&reader.iterator);
+        const result = try part2(&reader.iterator);
         try std.testing.expectEqual(6, result);
     }
 }

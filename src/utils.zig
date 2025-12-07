@@ -1,19 +1,19 @@
 const std = @import("std");
 
-fn print_help_and_exit() void {
+fn printHelpAndExit() void {
     const prog = std.os.argv[0];
     std.debug.print("Usage: {s} <input_file>\n", .{prog});
     std.process.exit(0);
 }
 
-pub fn get_input_file() !std.fs.File {
+pub fn getInputFile() !std.fs.File {
     if (std.os.argv.len < 2) {
-        print_help_and_exit();
+        printHelpAndExit();
     }
 
     const arg = std.mem.sliceTo(std.os.argv[1], 0);
     if (std.mem.eql(u8, arg, "--help") or std.mem.eql(u8, arg, "-h")) {
-        print_help_and_exit();
+        printHelpAndExit();
     }
     return try std.fs.cwd().openFile(arg, .{ .mode = .read_only });
 }

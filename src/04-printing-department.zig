@@ -1,7 +1,7 @@
 const std = @import("std");
 
 const utils = @import("utils.zig");
-const get_input_file = utils.get_input_file;
+const getInputFile = utils.getInputFile;
 const SegmentIterator = utils.SegmentIterator;
 const FileSegmentReader = utils.FileSegmentReader;
 const BufferSegmentReader = utils.BufferSegmentReader;
@@ -96,7 +96,7 @@ fn part2(segments: *SegmentIterator, allocator: std.mem.Allocator) !usize {
 }
 
 pub fn main() !void {
-    var input_file = try get_input_file();
+    var input_file = try getInputFile();
     defer input_file.close();
 
     var read_buf: [1024]u8 = undefined;

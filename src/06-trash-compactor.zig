@@ -1,7 +1,7 @@
 const std = @import("std");
 
 const utils = @import("utils.zig");
-const get_input_file = utils.get_input_file;
+const getInputFile = utils.getInputFile;
 const SegmentIterator = utils.SegmentIterator;
 const FileSegmentReader = utils.FileSegmentReader;
 const BufferSegmentReader = utils.BufferSegmentReader;
@@ -11,7 +11,7 @@ const Op = enum {
     Multiply,
 };
 
-fn parse_number_line(line: []const u8, allocator: std.mem.Allocator) !std.ArrayList(u64) {
+fn parseNumberLine(line: []const u8, allocator: std.mem.Allocator) !std.ArrayList(u64) {
     var parts = std.mem.tokenizeScalar(u8, line, ' ');
 
     var numbers = try std.ArrayList(u64).initCapacity(allocator, 16);
@@ -24,7 +24,7 @@ fn parse_number_line(line: []const u8, allocator: std.mem.Allocator) !std.ArrayL
     return numbers;
 }
 
-fn parse_op_line(line: []const u8, allocator: std.mem.Allocator) !std.ArrayList(Op) {
+fn parseOpLine(line: []const u8, allocator: std.mem.Allocator) !std.ArrayList(Op) {
     var parts = std.mem.tokenizeScalar(u8, line, ' ');
 
     var ops = try std.ArrayList(Op).initCapacity(allocator, 16);
@@ -53,9 +53,9 @@ fn part1(segments: *SegmentIterator, allocator: std.mem.Allocator) !u64 {
     var ops: std.ArrayList(Op) = undefined;
     while (try segments.next()) |line| {
         if (try segments.eos()) {
-            ops = try parse_op_line(line, allocator);
+            ops = try parseOpLine(line, allocator);
         } else {
-            try lines.append(allocator, try parse_number_line(line, allocator));
+            try lines.append(allocator, try parseNumberLine(line, allocator));
         }
     }
     defer {
@@ -200,7 +200,7 @@ fn part2(segments: *SegmentIterator, allocator: std.mem.Allocator) !u64 {
 }
 
 pub fn main() !void {
-    var input_file = try get_input_file();
+    var input_file = try getInputFile();
     defer input_file.close();
 
     var read_buf: [1024]u8 = undefined;
