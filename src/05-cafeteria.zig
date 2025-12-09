@@ -25,7 +25,7 @@ fn Range(comptime T: type) type {
             return self.start <= value and value <= self.end;
         }
 
-        pub fn less_than(context: void, a: Range(T), b: Range(T)) bool {
+        pub fn lessThan(context: void, a: Range(T), b: Range(T)) bool {
             _ = context;
             return a.start < b.start;
         }
@@ -73,7 +73,7 @@ fn Database(comptime T: type) type {
 }
 
 fn merge(ranges: []Range(u64), allocator: std.mem.Allocator) !std.ArrayList(Range(u64)) {
-    std.mem.sort(Range(u64), ranges, {}, Range(u64).less_than);
+    std.mem.sort(Range(u64), ranges, {}, Range(u64).lessThan);
 
     var merged_ranges: std.ArrayList(Range(u64)) = try std.ArrayList(Range(u64)).initCapacity(allocator, ranges.len);
 
@@ -145,15 +145,19 @@ pub fn main() !void {
     {
         var reader = try FileSegmentReader.init(&input_file, &read_buf, allocator, '\n');
         defer reader.deinit();
+        var timer = try std.time.Timer.start();
         const result = try part1(&reader.iterator, allocator);
-        std.debug.print("Part 1: {}\n", .{result});
+        const elapsed_ms = timer.read() / std.time.ns_per_ms;
+        std.debug.print("Part 1: {} ({} ms)\n", .{ result, elapsed_ms });
     }
 
     {
         var reader = try FileSegmentReader.init(&input_file, &read_buf, allocator, '\n');
         defer reader.deinit();
+        var timer = try std.time.Timer.start();
         const result = try part2(&reader.iterator, allocator);
-        std.debug.print("Part 2: {}\n", .{result});
+        const elapsed_ms = timer.read() / std.time.ns_per_ms;
+        std.debug.print("Part 2: {} ({} ms)\n", .{ result, elapsed_ms });
     }
 }
 

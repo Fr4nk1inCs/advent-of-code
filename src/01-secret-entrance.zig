@@ -83,15 +83,19 @@ pub fn main() !void {
     {
         var reader = try FileSegmentReader.init(&input_file, &read_buf, allocator, '\n');
         defer reader.deinit();
+        var timer = try std.time.Timer.start();
         const result = try part1(&reader.iterator);
-        std.debug.print("Part 1: {d}\n", .{result});
+        const elapsed_ms = timer.read() / std.time.ns_per_ms;
+        std.debug.print("Part 1: {} ({} ms)\n", .{ result, elapsed_ms });
     }
 
     {
         var reader = try FileSegmentReader.init(&input_file, &read_buf, allocator, '\n');
         defer reader.deinit();
+        var timer = try std.time.Timer.start();
         const result = try part2(&reader.iterator);
-        std.debug.print("Part 2: {d}\n", .{result});
+        const elapsed_ms = timer.read() / std.time.ns_per_ms;
+        std.debug.print("Part 2: {} ({} ms)\n", .{ result, elapsed_ms });
     }
 }
 
